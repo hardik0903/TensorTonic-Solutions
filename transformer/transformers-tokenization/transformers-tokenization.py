@@ -23,21 +23,25 @@ class SimpleTokenizer:
         Add special tokens first, then unique words.
         """
         # YOUR CODE HERE
+        # Step 1: append word_to_id with special token first
         special_tokens = [self.pad_token, self.unk_token, self.bos_token, self.eos_token]
         for token in special_tokens:
             idx = len(self.word_to_id)
             self.word_to_id[token] = idx
             self.id_to_word[idx]=token
 
-        unique_sets = set()
+        # Step 2: create unique text in lower and indiviual from texts
+        unique_words = set()
         for text in texts:
-            unique_sets.update(text.lower().split())
+            words = text.lower().split()
+            unique_words.update(words)
 
-        for word in sorted(unique_sets):
-            if word not in self.word_to_id:
+        # Step 3: append the sorted unique words from set into word_to_id
+        for words in sorted(unique_words):
+            if words not in self.word_to_id:
                 idx = len(self.word_to_id)
-                self.word_to_id[word]=idx
-                self.id_to_word[idx]=word
+                self.word_to_id[words] = idx
+                self.id_to_word[idx] = words
 
         self.vocab_size = len(self.word_to_id)
                 
@@ -49,9 +53,12 @@ class SimpleTokenizer:
         Use UNK for unknown words.
         """
         # YOUR CODE HERE
-        unk_id = self.word_to_id[self.unk_token]
-        words = text.lower().split()
 
+        # Step 1: lower and split the give string that needs to be encoded
+        words = text.lower().split()
+        unk_id = self.word_to_id[self.unk_token]
+
+        # Step 2: check if word exists in word_to_id if yes then append its id else appends unk_id
         return [self.word_to_id.get(word, unk_id) for word in words]
         pass
     
@@ -59,8 +66,11 @@ class SimpleTokenizer:
         """
         Convert list of token IDs back to text.
         """
-        # YOUR CODE HERE
-        words = [self.id_to_word.get(i, "<UNK>") for i in ids]
 
+        # Step 1: see if that particular id maps to a word in id_to_word if yes append the word else append "<UNK>"
+        words = [self.id_to_word.get(i, "<UNK>") for i in  ids]
+
+        # Step 2: convert the words to string
         return " ".join(words)
+        # YOUR CODE HERE
         pass
